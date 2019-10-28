@@ -1,4 +1,4 @@
-@import url("fontawesome-all.min.css");
+@import url("./fontawesome-all.min.css");
 @import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300italic,400,600");
 
 /*
@@ -2248,7 +2248,7 @@ input, select, textarea {
 
 			#main > section.one {
 				background-color: #81918E;
-				background-image: url("../../images/banner.jpg");
+				background-image: url("../images/banner.jpg");
 			}
 
 			#main > section.two {
