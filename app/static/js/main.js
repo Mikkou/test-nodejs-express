@@ -55,9 +55,9 @@
 
 				var	$this = $(this),
 					id = $this.attr('href'),
-					$section = $(id);
+					$section = id.indexOf('/') > -1 ? $(id.split('/')[id.split('/').length - 1]) : $(id);
 
-				// No section for this link? Bail.
+        // No section for this link? Bail.
 					if ($section.length < 1)
 						return;
 

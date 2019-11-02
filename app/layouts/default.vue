@@ -6,17 +6,33 @@
       <div class="top">
 
         <div id="logo">
-          <span class="image avatar48"><img src="../assets/images/avatar.jpg" alt="" /></span>
+          <span class="image avatar48"><img alt="" src="../assets/images/avatar.jpg"/></span>
           <h1 id="title">Jane Doe</h1>
           <p>Hyperspace Engineer</p>
         </div>
 
         <nav id="nav">
           <ul>
-            <li><a href="#top" id="top-link"><span class="icon solid fa-home">Intro</span></a></li>
-            <li><a href="#portfolio" id="portfolio-link"><span class="icon solid fa-th">Current translations</span></a></li>
-            <li><a href="#about" id="about-link"><span class="icon solid fa-user">About Me</span></a></li>
-            <li><a href="#contact" id="contact-link"><span class="icon solid fa-envelope">Contact</span></a></li>
+            <li>
+              <nuxt-link :to="$route.path === '/' ? '#top' : '/'" id="top-link">
+                <span class="icon solid fa-home">Intro</span>
+              </nuxt-link>
+            </li>
+            <li>
+              <nuxt-link :to="$route.path === '/' ? '#portfolio' : '/'" id="portfolio-link">
+                <span class="icon solid fa-th">Current translations</span>
+              </nuxt-link>
+            </li>
+            <li>
+              <nuxt-link :to="$route.path === '/' ? '#about' : '/'" id="about-link">
+                <span class="icon solid fa-user">About Me</span>
+              </nuxt-link>
+            </li>
+            <li>
+              <nuxt-link :to="$route.path === '/' ? '#contact' : '/'" id="contact-link">
+                <span class="icon solid fa-envelope">Contact</span>
+              </nuxt-link>
+            </li>
           </ul>
         </nav>
 
@@ -25,15 +41,19 @@
       <div class="bottom">
 
         <ul class="icons">
-          <li><a href="https://www.facebook.com/volha.kaptur" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
-          <li><a href="mailto: volha.kaptur@gmail.com" class="icon solid fa-envelope"><span class="label">Email</span></a></li>
+          <li><a class="icon brands fa-facebook-f" href="https://www.facebook.com/volha.kaptur"><span class="label">Facebook</span></a>
+          </li>
+          <li><a class="icon solid fa-envelope" href="mailto: volha.kaptur@gmail.com"><span
+            class="label"
+          >Email</span></a></li>
+          <li><a class="" href="https://vk.com/volhakaptur"><span class="label vk-icon">Vk</span></a></li>
         </ul>
 
       </div>
 
     </div>
 
-    <nuxt />
+    <nuxt/>
 
   </div>
 </template>
@@ -54,6 +74,8 @@
   }
 </script>
 
-<style>
-
+<style scoped>
+  .vk-icon {
+    font-weight: 600;
+  }
 </style>

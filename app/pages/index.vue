@@ -128,7 +128,14 @@
 
 <script>
 export default {
-
+  mounted () {
+    this.$nextTick(() => {
+      if (this.$route.hash.indexOf('#') > -1) {
+        const idName = this.$route.hash.split('#')[1]
+        document.getElementById(idName).scrollIntoView()
+      }
+    })
+  }
 }
 </script>
 
