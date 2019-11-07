@@ -1,7 +1,13 @@
 const express = require('express')
 const consola = require('consola')
+const bodyParser = require('body-parser')
 const { Nuxt, Builder } = require('nuxt')
+const apiRoutes = require('./routes/index')
 const app = express()
+
+app.use(bodyParser.urlencoded({extended: true}))
+app.use(bodyParser.json())
+app.use('/api', apiRoutes)
 
 // Import and Set Nuxt.js options
 const config = require('../nuxt.config.js')
