@@ -15,7 +15,8 @@
 
 <script>
   export default {
-    layout: 'admin'
+    layout: 'admin',
+    middleware: 'only-admin'
   }
 </script>
 

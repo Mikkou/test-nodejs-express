@@ -1,6 +1,6 @@
 <template>
-  <b-container>
-    <b-form @submit="onSubmit">
+  <b-container v-if="show">
+    <b-form @submit.prevent="onSubmit">
       <b-form-group
         id="input-group-1"
         label="Login"
@@ -16,12 +16,12 @@
       </b-form-group>
 
       <b-form-group
-        id="input-group-1"
+        id="input-group-2"
         label="Enter password"
-        label-for="input-1"
+        label-for="input-2"
       >
         <b-form-input
-          id="input-1"
+          id="input-2"
           v-model="form.password"
           type="password"
           required
@@ -36,24 +36,45 @@
 
 <script>
   export default {
-    layout: 'admin',
+    layout: 'empty',
     data() {
       return {
         form: {
           login: '',
           password: ''
-        }
+        },
+        show: false
       }
     },
+    mounted () {
+      (async () => {
+        const token = localStorage.getItem('token')
+        if (token) {
+          const { status, data } = await this.$axios.post('/api/v1/login/verify', { token })
+          if (status === 200 && data.success) {
+            this.redirect()
+          } else {
+            this.show = true
+          }
+        }
+        this.show = true
+      })()
+    },
     methods: {
-      onSubmit(evt) {
-        evt.preventDefault()
-        alert(JSON.stringify(this.form))
+      async onSubmit() {
+        const { status, data: { token } } = await this.$axios.post('/api/v1/login', this.form)
+        if (status === 200 && token) {
+          localStorage.setItem('token', token)
+          this.$axios.defaults.headers.common['Authorization'] = token
+          this.redirect()
+        } else {
+          throw new Error('Something go wrong')
+        }
+      },
+      redirect () {
+        this.$router.replace({ path: '/admin' })
       }
     }
   }
 </script>
 
-<style scoped>
-
-</style>

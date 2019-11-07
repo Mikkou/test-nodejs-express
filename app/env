@@ -1,0 +1,5 @@
+ADMIN_LOGIN=(login)
+ADMIN_PASSWORD=(password)
+JWT_SECRET=(code)
+TOKEN_SECRET=(code)
+MONGO_LOCAL_CONN_URL=(url)

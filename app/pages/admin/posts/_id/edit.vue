@@ -84,6 +84,7 @@
 <script>
   export default {
     layout: 'admin',
+    middleware: 'only-admin',
     data() {
       return {
         form: {

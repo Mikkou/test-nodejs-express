@@ -2,12 +2,21 @@ const express = require('express')
 const consola = require('consola')
 const bodyParser = require('body-parser')
 const { Nuxt, Builder } = require('nuxt')
-const apiRoutes = require('./routes/index')
+const apiRoutes = require('./routes')
 const app = express()
+let mongoose = require('mongoose')
+require('dotenv').config()
+const logger = require('morgan')
+const environment = process.env.NODE_ENV
 
-app.use(bodyParser.urlencoded({extended: true}))
-app.use(bodyParser.json())
-app.use('/api', apiRoutes)
+let options = {
+  server: { socketOptions: { keepAlive: 1, connectTimeoutMS: 30000 } },
+  replset: { socketOptions: { keepAlive: 1, connectTimeoutMS: 30000 } }
+}
+
+mongoose.connect(process.env.MONGO_LOCAL_CONN_URL, options)
+let db = mongoose.connection
+db.on('error', console.error.bind(console, 'connection error:'))
 
 // Import and Set Nuxt.js options
 const config = require('../nuxt.config.js')
@@ -27,8 +36,21 @@ async function start () {
     await nuxt.ready()
   }
 
+  app.use(bodyParser.urlencoded({extended: true}))
+  app.use(bodyParser.json())
+  app.use(bodyParser.text())
+  app.use(bodyParser.json({ type: 'application/json' }))
+
+  app.use('/api', apiRoutes)
+
   // Give nuxt middleware to express
   app.use(nuxt.render)
+
+
+
+  if (environment !== 'production') {
+    app.use(logger('dev'))
+  }
 
   // Listen the server
   app.listen(port, host)
