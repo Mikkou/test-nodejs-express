@@ -7,7 +7,7 @@ const app = express()
 let mongoose = require('mongoose')
 require('dotenv').config()
 const logger = require('morgan')
-const environment = process.env.NODE_ENV
+const isDev = process.env.NODE_ENV !== 'production'
 
 let options = {
   server: { socketOptions: { keepAlive: 1, connectTimeoutMS: 30000 } },
@@ -20,7 +20,7 @@ db.on('error', console.error.bind(console, 'connection error:'))
 
 // Import and Set Nuxt.js options
 const config = require('../nuxt.config.js')
-config.dev = process.env.NODE_ENV !== 'production'
+config.dev = isDev
 
 async function start () {
   // Init Nuxt.js
@@ -48,7 +48,7 @@ async function start () {
 
 
 
-  if (environment !== 'production') {
+  if (isDev) {
     app.use(logger('dev'))
   }
 
