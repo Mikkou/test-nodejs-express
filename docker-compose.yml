@@ -1,5 +1,4 @@
-version: "3"
-
+version: "3.5"
 services:
   nuxt:
     build: ./app/
@@ -9,7 +8,8 @@ services:
       - "3000:3000"
     command:
       "npm run start"
-
+    depends_on:
+      - mongo
   nginx:
     image: nginx:1.17
     container_name: ngx
