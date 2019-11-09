@@ -1,5 +1,5 @@
 const { Router } = require('express')
-const multer  = require('multer')
+const multer = require('multer')
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -7,7 +7,7 @@ const storage = multer.diskStorage({
   },
   filename: (req, file, cb) => {
     const fileParts = file.originalname.split('.')
-    const format = fileParts.splice(-1,1)
+    const format = fileParts.splice(-1, 1)
     cb(null, fileParts.join('.') + '-' + Date.now() + '.' + format[0])
   }
 })

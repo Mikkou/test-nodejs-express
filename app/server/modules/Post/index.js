@@ -43,9 +43,9 @@ module.exports = class Post {
 
             const post = result[0]
 
-            const downloadedFileName = req.file.filename.split('-')
-              .splice(0,req.file.filename.split('-').length - 1)
-              .join('-')
+            const downloadedFileName = req.file.originalname.split('.')
+              .splice(0,req.file.originalname.split('.').length - 1)
+              .join('.')
 
             const fileNameFromDb = post.imagePath.replace('/uploads/', '')
               .split('-')
@@ -53,6 +53,7 @@ module.exports = class Post {
               .join('-')
 
             if (downloadedFileName === fileNameFromDb) {
+              Post.deleteFile(req.file.path.replace('static/', '/'))
               req.body['imagePath'] = post.imagePath
               Object.assign(post, req.body).save((err) => {
                 if (err) res.send(err)
@@ -91,25 +92,17 @@ module.exports = class Post {
   }
 
   static async getOne (req, res) {
-    if (token !== req.header('Authorization')) {
-      res.json({ error: 'Вы не администратор.' })
-    } else {
-      const post = await PostModel.find({ _id: req.params.id })
-        .catch(() => res.json({ error: 'This post doesn\'t exist' }))
-      if (post.length > 0) {
-        res.json(post[0])
-      }
+    const post = await PostModel.find({ _id: req.params.id })
+      .catch(() => res.json({ error: 'This post doesn\'t exist' }))
+    if (post.length > 0) {
+      res.json(post[0])
     }
   }
 
   static async getAll (req, res) {
-    if (token !== req.header('Authorization')) {
-      res.json({ error: 'Вы не администратор.' })
-    } else {
-      const posts = await PostModel.find()
-        .catch(err => res.json({ error: err }))
-      res.json(posts)
-    }
+    const posts = await PostModel.find()
+      .catch(err => res.json({ error: err }))
+    res.json(posts)
   }
 
   static deleteFile (path) {
