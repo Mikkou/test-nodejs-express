@@ -68,7 +68,13 @@ async function getForm(req, res) {
     let mailOptions = {
       to: process.env.EMAIL_USER,
       subject: 'Сообщение с сайта',
-      body: `От: ${req.body.name}<br>Email: ${req.body.email}<br>Сообщение: ${req.body.message}`
+      html: `
+        <html>
+            <body>
+                От: ${req.body.name}<br>Email: ${req.body.email}<br>Сообщение: ${req.body.message}
+            </body>
+        </html>
+      `
     }
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
