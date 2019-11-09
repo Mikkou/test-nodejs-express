@@ -1,86 +1,49 @@
 <template>
   <b-container>
     <b-btn to="/admin/posts/add">Добавить пост</b-btn>
-    <b-card-group deck>
-      <b-card img-alt="Image" img-src="https://picsum.photos/300/300/?image=41" img-top title="Заголовок поста">
-        <b-card-text>
-          This is a wider card with supporting text below as a natural lead-in to additional content.
-          This content is a little bit longer.
-        </b-card-text>
-        <b-btn to="/admin/posts/123/edit">Редактировать</b-btn>
-        <b-btn to="/admin">Удалить</b-btn>
-        <template #footer>
-          <small class="text-muted">Создано вчера, 3 комментария</small>
-        </template>
-      </b-card>
-      <b-card img-alt="Image" img-src="https://picsum.photos/300/300/?image=41" img-top title="Заголовок поста">
-        <b-card-text>
-          This is a wider card with supporting text below as a natural lead-in to additional content.
-          This content is a little bit longer.
-        </b-card-text>
-        <b-btn to="/admin/posts/123/edit">Редактировать</b-btn>
-        <b-btn to="/admin">Удалить</b-btn>
-        <template #footer>
-          <small class="text-muted">Создано вчера, 3 комментария</small>
-        </template>
-      </b-card>
-      <b-card img-alt="Image" img-src="https://picsum.photos/300/300/?image=41" img-top title="Заголовок поста">
-        <b-card-text>
-          This is a wider card with supporting text below as a natural lead-in to additional content.
-          This content is a little bit longer.
-        </b-card-text>
-        <b-btn to="/admin/posts/123/edit">Редактировать</b-btn>
-        <b-btn to="/admin">Удалить</b-btn>
-        <template #footer>
-          <small class="text-muted">Создано вчера, 3 комментария</small>
-        </template>
-      </b-card>
-    </b-card-group>
-    <b-card-group deck>
-      <b-card img-alt="Image" img-src="https://picsum.photos/300/300/?image=41" img-top title="Заголовок поста">
-        <b-card-text>
-          This is a wider card with supporting text below as a natural lead-in to additional content.
-          This content is a little bit longer.
-        </b-card-text>
-        <b-btn to="/admin/posts/123/edit">Редактировать</b-btn>
-        <b-btn to="/admin">Удалить</b-btn>
-        <template #footer>
-          <small class="text-muted">Создано вчера, 3 комментария</small>
-        </template>
-      </b-card>
-      <b-card img-alt="Image" img-src="https://picsum.photos/300/300/?image=41" img-top title="Заголовок поста">
-        <b-card-text>
-          This is a wider card with supporting text below as a natural lead-in to additional content.
-          This content is a little bit longer.
-        </b-card-text>
-        <b-btn to="/admin/posts/123/edit">Редактировать</b-btn>
-        <b-btn to="/admin">Удалить</b-btn>
-        <template #footer>
-          <small class="text-muted">Создано вчера, 3 комментария</small>
-        </template>
-      </b-card>
-      <b-card img-alt="Image" img-src="https://picsum.photos/300/300/?image=41" img-top title="Заголовок поста">
-        <b-card-text>
-          This is a wider card with supporting text below as a natural lead-in to additional content.
-          This content is a little bit longer.
-        </b-card-text>
-        <b-btn to="/admin/posts/123/edit">Редактировать</b-btn>
-        <b-btn to="/admin">Удалить</b-btn>
-        <template #footer>
-          <small class="text-muted">Создано вчера, 3 комментария</small>
-        </template>
-      </b-card>
-    </b-card-group>
+    <b-card v-for="(post, index) in posts" :key="index" class="mb-3" img-alt="Card image" img-left :img-src="post.imagePath">
+      <u>{{ post.title }}</u>
+      <b-card-text>{{ post.description }}</b-card-text>
+      <div>3 комментария</div>
+      <b-btn :to="`/admin/posts/${post._id}/edit`">Редактировать</b-btn>
+      <b-btn @click="deletePost(post._id)">Удалить</b-btn>
+    </b-card>
+
   </b-container>
 </template>
 
 <script>
   export default {
     layout: 'admin',
-    middleware: 'only-admin'
+    middleware: 'only-admin',
+    data () {
+      return {
+        posts: []
+      }
+    },
+    created () {
+      (async () => {
+        const { data } = await this.$axios.get('/api/v1/posts')
+        this.posts = data
+      })()
+    },
+    methods: {
+      async deletePost (id) {
+        const { data: { success } } = await this.$axios.delete('/api/v1/posts/' + id)
+        if (success) {
+          alert('Пост был удален.')
+          const { data } = await this.$axios.get('/api/v1/posts')
+          this.posts = data
+        } else {
+          alert('Что-то пошло не так')
+        }
+      }
+    }
   }
 </script>
 
-<style scoped>
-
+<style>
+  .card img {
+    max-height: 200px;
+  }
 </style>

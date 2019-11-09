@@ -19,3 +19,10 @@ services:
       - ./nginx:/etc/nginx/conf.d
     depends_on:
       - nuxt
+  mongo:
+    image: mongo:latest
+    volumes:
+      - /data/db:/data/db
+    container_name: mongodb
+    ports:
+      - "27017:27017"

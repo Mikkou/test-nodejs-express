@@ -17,14 +17,14 @@
 
       <b-form-textarea
         id="textarea"
-        v-model="text"
+        v-model="form.description"
         placeholder="Enter something..."
         rows="3"
         max-rows="6"
       ></b-form-textarea>
 
       <b-form-group label="Small:" label-for="file-small" label-cols-sm="2" label-size="sm">
-        <b-form-file id="file-small" size="sm"></b-form-file>
+        <b-form-file v-model="form.image" id="file-small" size="sm"></b-form-file>
       </b-form-group>
 
       <b-button type="submit" variant="primary">Submit</b-button>
@@ -39,14 +39,26 @@
     data() {
       return {
         form: {
-          title: ''
+          title: '',
+          description: '',
+          image: null
         }
       }
     },
     methods: {
-      onSubmit(evt) {
+      async onSubmit(evt) {
         evt.preventDefault()
-        alert(JSON.stringify(this.form))
+        const data = new FormData()
+        data.set('title', this.form.title)
+        data.set('description', this.form.description)
+        data.set('image', this.form.image)
+        const { data: { success } } = await this.$axios.post('/api/v1/posts', data)
+        if (success) {
+          alert('Пост создан')
+          this.$router.replace({ path: '/admin' })
+        } else {
+          alert('ЧТо-то пошло не так')
+        }
       }
     }
   }

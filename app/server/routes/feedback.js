@@ -54,7 +54,7 @@ async function getForm(req, res) {
   }
 
   if (errors.length > 0) {
-    res.json({ errors: errors })
+    res.json({errors: errors})
   } else {
     let transporter = nodeMailer.createTransport({
       host: 'smtp.gmail.com',
@@ -66,9 +66,9 @@ async function getForm(req, res) {
       }
     })
     let mailOptions = {
-      to: req.body.email,
-      subject: 'Ваше сообщение отправлено',
-      body: `Спасибо ${req.body.name}, с Вами скоро свяжутся`
+      to: process.env.EMAIL_USER,
+      subject: 'Сообщение с сайта',
+      body: `От: ${req.body.name}<br>Email: ${req.body.email}<br>Сообщение: ${req.body.message}`
     }
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
@@ -76,7 +76,7 @@ async function getForm(req, res) {
       }
       console.log('Message %s sent: %s', info.messageId, info.response)
     })
-    res.json({ success: true })
+    res.json({success: true})
   }
 }
 
