@@ -112,4 +112,21 @@ module.exports = class Post {
   static getFilePath (name) {
     return name.replace('static/', '/')
   }
+
+  static async createdComment (req, res) {
+    const result = await PostModel.find({ _id: req.body.postId })
+    if (result.length > 0) {
+      const post = result[0]
+      const body = req.body
+      delete body.postId
+      body['ip'] = req.headers['x-forwarded-for'] || req.connection.remoteAddress
+      post.comments.push(body)
+      post.save((err) => {
+        if (err) res.send(err)
+        res.json({ success: true })
+      })
+    } else {
+      res.json({ error: 'This post doesn\'t exist' })
+    }
+  }
 }

@@ -1,7 +1,7 @@
 <template>
   <b-container>
 
-    <b-btn>delete post</b-btn>
+    <b-btn @click="deletePost($route.params.id)">delete post</b-btn>
 
     <b-form @submit="onSubmit">
       <b-form-group
@@ -33,47 +33,22 @@
       Comments
 
       <b-list-group>
-        <b-list-group-item class="flex-column align-items-start" href="#">
+        <b-list-group-item
+          :key="index"
+          class="flex-column align-items-start"
+          href="#" v-for="(comment, index) in comments"
+        >
           <div class="d-flex w-100 justify-content-between">
-            <h5 class="mb-1">Nickname</h5>
-            <small>3 days ago</small>
+            <h5 class="mb-1">{{ comment.name }}</h5>
+            <small>{{ comment.createdAt.split('T')[0] }}</small>
           </div>
 
-          <p class="mb-1">
-            Comment text
-          </p>
+          <p class="mb-1">{{ comment.text }}</p>
 
-          <small>ip address</small>
-        </b-list-group-item>
-
-        <b-list-group-item class="flex-column align-items-start" href="#">
-          <div class="d-flex w-100 justify-content-between">
-            <h5 class="mb-1">Nickname</h5>
-            <small>3 days ago</small>
-          </div>
-
-          <p class="mb-1">
-            Comment text
-          </p>
-
-          <small>ip address</small>
-        </b-list-group-item>
-
-        <b-list-group-item class="flex-column align-items-start" href="#">
-          <div class="d-flex w-100 justify-content-between">
-            <h5 class="mb-1">Nickname</h5>
-            <small>3 days ago</small>
-          </div>
-
-          <p class="mb-1">
-            Comment text
-          </p>
-
-          <small>ip address</small>
+          <small>{{ comment.ip }}</small>
         </b-list-group-item>
 
       </b-list-group>
-
 
       <b-button type="submit" variant="primary">Submit</b-button>
     </b-form>
@@ -92,10 +67,20 @@
           description: '',
           file: null
         },
+        comments: [],
         imagePath: null
       }
     },
     methods: {
+      async deletePost (id) {
+        const { data: { success } } = await this.$axios.delete('/api/v1/posts/' + id)
+        if (success) {
+          alert('Пост был удален.')
+          this.$router.replace({ path: '/admin/posts' })
+        } else {
+          alert('Что-то пошло не так')
+        }
+      },
       async onSubmit (evt) {
         evt.preventDefault()
         const data = new FormData()
@@ -124,6 +109,7 @@
     mounted () {
       (async () => {
         const { data } = await this.$axios.get('api/v1/posts/' + this.$route.params.id)
+        this.comments = data.comments
         this.form._id = data._id
         this.form.title = data.title
         this.form.description = data.description
@@ -145,7 +131,3 @@
     }
   }
 </script>
-
-<style scoped>
-
-</style>

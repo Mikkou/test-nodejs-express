@@ -35,5 +35,7 @@ router.delete('/v1/posts/:id', Post.delete)
 router.get('/v1/posts/:id', Post.getOne)
 router.get('/v1/posts/', Post.getAll)
 
+router.post('/v1/posts/comments', Post.createdComment)
+
 module.exports = router
 

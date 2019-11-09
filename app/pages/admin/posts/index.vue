@@ -4,7 +4,7 @@
     <b-card v-for="(post, index) in posts" :key="index" class="mb-3" img-alt="Card image" img-left :img-src="post.imagePath">
       <u>{{ post.title }}</u>
       <b-card-text>{{ post.description }}</b-card-text>
-      <div>3 комментария</div>
+      <div>{{ post.comments.length }} комментария</div>
       <b-btn :to="`/admin/posts/${post._id}/edit`">Редактировать</b-btn>
       <b-btn @click="deletePost(post._id)">Удалить</b-btn>
     </b-card>
