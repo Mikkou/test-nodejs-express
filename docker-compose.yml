@@ -8,6 +8,8 @@ services:
       - "3000:3000"
     command:
       "npm run start"
+    volumes:
+      - ./app/static/uploads:/src/static/uploads
     depends_on:
       - mongo
   nginx:
