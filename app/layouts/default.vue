@@ -7,7 +7,7 @@
 
         <div id="logo">
           <span class="image avatar48"><img alt="" src="../assets/images/avatar.jpg"/></span>
-          <h1 id="title">Jane Doe</h1>
+          <h1 id="title">Volha Kaptur</h1>
           <p>Hyperspace Engineer</p>
         </div>
 
